@@ -3,6 +3,8 @@
         "roughjs/bundled/rough.esm.js": "https://unpkg.com/roughjs/bundled/rough.esm.js?module",
         "wired-button": "https://unpkg.com/wired-button@2.1.0/lib/wired-button.js?module",
         "wired-slider": "https://unpkg.com/wired-slider@2.1.2/lib/wired-slider.js?module",
+        "wired-toggle": "https://unpkg.com/wired-toggle@2.1.0/lib/wired-toggle.js?module",
+        "lit/directives/live.js": "https://unpkg.com/lit/directives/live.js?module",
         "lit-element/lit-element.js": "https://unpkg.com/lit-element/lit-element.js?module"
     }
 }

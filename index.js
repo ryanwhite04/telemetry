@@ -5,12 +5,16 @@ class LightController extends LitElement {
     return {
       connected: { type: Boolean },
       brightness: { type: Number },
+      cycling: { type: Boolean },
+      high: { type: Boolean },
     }
   }
   constructor() {
     super();
     this.connected = false;
     this.brightness = 0;
+    this.cycling = false;
+    this.high = false;
   }
   async request() {
     return new Port(await navigator.usb.requestDevice({ filters: [
@@ -75,6 +79,19 @@ class LightController extends LitElement {
       .catch(console.error);
     }
   }
+  toggleCycling() {
+      this.cycling = !this.cycling;
+      this.cycling ? this.cycle() : clearInterval(this.timer);
+      console.log('toggle', this.cycling);
+
+  }
+  cycle() {
+      console.log('cycle', this.timer);
+      this.timer = setInterval(() => {
+          this.brightness = this.high ? 0 : 99;
+          this.high = !this.high;
+      }, 5000);
+  }
   firstUpdated() {
       this.poll(1000);
   }
@@ -104,12 +121,16 @@ class LightController extends LitElement {
     return html`
       <style>
       </style>
+      <input id="cycling" type="checkbox" @click=${this.toggleCycling} ?checked=${this.cycling}>
+      <p>Brightness: ${this.brightness}</p>
       <wired-button @click=${this.reset}>Reset</wired-button>
       <wired-button @click=${this.toggle}>${this.connected ? "Disconnect" : "Connect"}</wired-button>
+      <input id="cycling" type="checkbox" .checked=${this.cycling}> 
       <label for="size">Brightness
-        <wired-slider id="brightness" step="1" knobradius="15" value=${this.brightness} @change=${this.updateBrightness} min="0" max="100"></wired-slider>
+        <wired-slider id="brightness" ?disabled={this.cycling} step="1" knobradius="15" value=${this.brightness} @change=${this.updateBrightness} min="0" max="100"></wired-slider>
       </label>
     `;
   }
 }
 customElements.define('light-controller', LightController);
+
